@@ -46,7 +46,6 @@ This MCP provides a suite of AI-callable tools that connect directly to a Facebo
 | `get_post_reactions_like_total`  | Get total number of 'Like' reactions.                               |
 | `get_post_top_commenters`        | Get the top commenters on a post.                                   |
 | `post_image_to_facebook`         | Post an image with a caption to the Facebook page.                  |
-| `send_dm_to_user`                | Send a direct message to a user.                                    |
 | `update_post`                    | Updates an existing post's message.                                 |
 | `schedule_post`                  | Schedule a post for future publication.                     |
 | `get_page_fan_count`             | Retrieve the total number of Page fans.                     |
@@ -84,15 +83,26 @@ Once uv is installed, install the project dependencies:
 uv pip install -r requirements.txt
 ```
 
-### 3. Set Up Environment
+### 3. Set Up Clients
 
-Create a .env file in the root directory and add your Facebook Page credentials. 
-You can obtain these from  https://developers.facebook.com/tools/explorer
+This fork supports managing **multiple Facebook Pages** (e.g. one per client) from a single server. Copy `clients.example.json` to `clients.json` in the root directory and add one entry per Page, keyed by a slug of your choosing:
 
-```bash
-FACEBOOK_ACCESS_TOKEN=your_facebook_page_access_token
-FACEBOOK_PAGE_ID=your_page_id
+```json
+{
+  "acme": {
+    "access_token": "your_facebook_page_access_token_for_acme",
+    "page_id": "your_acme_page_id"
+  },
+  "widgetco": {
+    "access_token": "your_facebook_page_access_token_for_widgetco",
+    "page_id": "your_widgetco_page_id"
+  }
+}
 ```
+
+You can obtain a Page access token and Page ID from https://developers.facebook.com/tools/explorer
+
+`clients.json` is gitignored — never commit it. Every tool call now takes a `client_id` argument matching one of these slugs (e.g. `post_to_facebook(client_id="acme", message="...")`); use the `list_clients` tool to see which slugs are configured.
 
 ## 🧩 Using with Claude Desktop
 To set up the FacebookMCP in Clade:
@@ -122,6 +132,17 @@ To set up the FacebookMCP in Clade:
 ## ✅ You’re Ready to Go!
 
 That’s it — your Facebook MCP server is now fully configured and ready to power Claude Desktop. You can now post, moderate, and measure engagement all through natural language prompts!
+
+---
+
+## 🧪 Running Tests
+
+Tests run fully offline against a stubbed Graph API — no real token or network required.
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q --cov --cov-report=term-missing
+```
 
 ---
 
