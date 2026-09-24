@@ -46,7 +46,6 @@ This MCP provides a suite of AI-callable tools that connect directly to a Facebo
 | `get_post_reactions_like_total`  | Get total number of 'Like' reactions.                               |
 | `get_post_top_commenters`        | Get the top commenters on a post.                                   |
 | `post_image_to_facebook`         | Post an image with a caption to the Facebook page.                  |
-| `send_dm_to_user`                | Send a direct message to a user.                                    |
 | `update_post`                    | Updates an existing post's message.                                 |
 | `schedule_post`                  | Schedule a post for future publication.                     |
 | `get_page_fan_count`             | Retrieve the total number of Page fans.                     |
@@ -133,6 +132,17 @@ To set up the FacebookMCP in Clade:
 ## ✅ You’re Ready to Go!
 
 That’s it — your Facebook MCP server is now fully configured and ready to power Claude Desktop. You can now post, moderate, and measure engagement all through natural language prompts!
+
+---
+
+## 🧪 Running Tests
+
+Tests run fully offline against a stubbed Graph API — no real token or network required.
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q --cov --cov-report=term-missing
+```
 
 ---
 

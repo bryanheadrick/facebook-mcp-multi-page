@@ -2,3 +2,5 @@
 .venv
 __pycache__
 clients.json
+.coverage
+htmlcov/

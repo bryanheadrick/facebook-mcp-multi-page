@@ -6,6 +6,9 @@ GRAPH_API_BASE_URL = f"https://graph.facebook.com/{GRAPH_API_VERSION}"
 
 CLIENTS_FILE = os.getenv("FACEBOOK_CLIENTS_FILE", os.path.join(os.path.dirname(__file__), "clients.json"))
 
+REQUEST_TIMEOUT_SECONDS = float(os.getenv("FACEBOOK_REQUEST_TIMEOUT_SECONDS", "10"))
+MAX_RETRIES = int(os.getenv("FACEBOOK_MAX_RETRIES", "2"))
+
 
 class UnknownClientError(Exception):
     pass

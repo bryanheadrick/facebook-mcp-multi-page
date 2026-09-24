@@ -217,14 +217,6 @@ def post_image_to_facebook(client_id: str, image_url: str, caption: str) -> dict
     return Manager(client_id).post_image_to_facebook(image_url, caption)
 
 @mcp.tool()
-def send_dm_to_user(client_id: str, user_id: str, message: str) -> dict[str, Any]:
-    """Send a direct message to a user.
-    Input: client_id (str), user_id (str), message (str)
-    Output: dict of result from Messenger API
-    """
-    return Manager(client_id).send_dm_to_user(user_id, message)
-
-@mcp.tool()
 def update_post(client_id: str, post_id: str, new_message: str) -> dict[str, Any]:
     """Updates an existing post's message.
     Input: client_id (str), post_id (str), new_message (str)
