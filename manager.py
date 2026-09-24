@@ -3,8 +3,8 @@ from facebook_api import FacebookAPI
 
 
 class Manager:
-    def __init__(self):
-        self.api = FacebookAPI()
+    def __init__(self, client_id: str):
+        self.api = FacebookAPI(client_id)
 
     def post_to_facebook(self, message: str) -> dict[str, Any]:
         return self.api.post_message(message)
@@ -51,7 +51,7 @@ class Manager:
             "post_reactions_haha_total", "post_reactions_sorry_total", "post_reactions_anger_total",
         ]
         return self.api.get_bulk_insights(post_id, metrics)
-    
+
     def get_post_impressions(self, post_id: str) -> dict[str, Any]:
         return self.api.get_insights(post_id, "post_impressions")
 
@@ -102,7 +102,7 @@ class Manager:
 
     def send_dm_to_user(self, user_id: str, message: str) -> dict[str, Any]:
         return self.api.send_dm_to_user(user_id, message)
-    
+
     def update_post(self, post_id: str, new_message: str) -> dict[str, Any]:
         return self.api.update_post(post_id, new_message)
 

@@ -84,15 +84,26 @@ Once uv is installed, install the project dependencies:
 uv pip install -r requirements.txt
 ```
 
-### 3. Set Up Environment
+### 3. Set Up Clients
 
-Create a .env file in the root directory and add your Facebook Page credentials. 
-You can obtain these from  https://developers.facebook.com/tools/explorer
+This fork supports managing **multiple Facebook Pages** (e.g. one per client) from a single server. Copy `clients.example.json` to `clients.json` in the root directory and add one entry per Page, keyed by a slug of your choosing:
 
-```bash
-FACEBOOK_ACCESS_TOKEN=your_facebook_page_access_token
-FACEBOOK_PAGE_ID=your_page_id
+```json
+{
+  "acme": {
+    "access_token": "your_facebook_page_access_token_for_acme",
+    "page_id": "your_acme_page_id"
+  },
+  "widgetco": {
+    "access_token": "your_facebook_page_access_token_for_widgetco",
+    "page_id": "your_widgetco_page_id"
+  }
+}
 ```
+
+You can obtain a Page access token and Page ID from https://developers.facebook.com/tools/explorer
+
+`clients.json` is gitignored — never commit it. Every tool call now takes a `client_id` argument matching one of these slugs (e.g. `post_to_facebook(client_id="acme", message="...")`); use the `list_clients` tool to see which slugs are configured.
 
 ## 🧩 Using with Claude Desktop
 To set up the FacebookMCP in Clade:

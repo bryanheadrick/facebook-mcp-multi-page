@@ -1,0 +1,10 @@
+{
+  "acme": {
+    "access_token": "your_facebook_page_access_token_for_acme",
+    "page_id": "your_acme_page_id"
+  },
+  "widgetco": {
+    "access_token": "your_facebook_page_access_token_for_widgetco",
+    "page_id": "your_widgetco_page_id"
+  }
+}

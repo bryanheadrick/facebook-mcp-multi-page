@@ -1,24 +1,28 @@
 import requests
 from typing import Any
-from config import GRAPH_API_BASE_URL, PAGE_ID, PAGE_ACCESS_TOKEN
+from config import GRAPH_API_BASE_URL, get_client_credentials
 
 
 class FacebookAPI:
+    def __init__(self, client_id: str):
+        self.client_id = client_id
+        self.access_token, self.page_id = get_client_credentials(client_id)
+
     # Generic Graph API request method
     def _request(self, method: str, endpoint: str, params: dict[str, Any], json: dict[str, Any] = None) -> dict[str, Any]:
         url = f"{GRAPH_API_BASE_URL}/{endpoint}"
-        params["access_token"] = PAGE_ACCESS_TOKEN
+        params["access_token"] = self.access_token
         response = requests.request(method, url, params=params, json=json)
         return response.json()
 
     def post_message(self, message: str) -> dict[str, Any]:
-        return self._request("POST", f"{PAGE_ID}/feed", {"message": message})
+        return self._request("POST", f"{self.page_id}/feed", {"message": message})
 
     def reply_to_comment(self, comment_id: str, message: str) -> dict[str, Any]:
         return self._request("POST", f"{comment_id}/comments", {"message": message})
 
     def get_posts(self) -> dict[str, Any]:
-        return self._request("GET", f"{PAGE_ID}/posts", {"fields": "id,message,created_time"})
+        return self._request("GET", f"{self.page_id}/posts", {"fields": "id,message,created_time"})
 
     def get_comments(self, post_id: str) -> dict[str, Any]:
         return self._request("GET", f"{post_id}/comments", {"fields": "id,message,from,created_time"})
@@ -49,8 +53,8 @@ class FacebookAPI:
             "url": image_url,
             "caption": caption
         }
-        return self._request("POST", f"{PAGE_ID}/photos", params)
-    
+        return self._request("POST", f"{self.page_id}/photos", params)
+
     def send_dm_to_user(self, user_id: str, message: str) -> dict[str, Any]:
         payload = {
             "recipient": {"id": user_id},
@@ -58,7 +62,7 @@ class FacebookAPI:
             "messaging_type": "RESPONSE"
         }
         return self._request("POST", "me/messages", {}, json=payload)
-    
+
     def update_post(self, post_id: str, new_message: str) -> dict[str, Any]:
         return self._request("POST", f"{post_id}", {"message": new_message})
 
@@ -68,10 +72,10 @@ class FacebookAPI:
             "published": False,
             "scheduled_publish_time": publish_time,
         }
-        return self._request("POST", f"{PAGE_ID}/feed", params)
+        return self._request("POST", f"{self.page_id}/feed", params)
 
     def get_page_fan_count(self) -> int:
-        data = self._request("GET", f"{PAGE_ID}", {"fields": "fan_count"})
+        data = self._request("GET", f"{self.page_id}", {"fields": "fan_count"})
         return data.get("fan_count", 0)
 
     def get_post_share_count(self, post_id: str) -> int:
@@ -85,8 +89,8 @@ class FacebookAPI:
         return self._request("GET", f"{post_id}", {"fields": "permalink_url"})
 
     def get_scheduled_posts(self) -> dict[str, Any]:
-        return self._request("GET", f"{PAGE_ID}/scheduled_posts", {"fields": "id,message,scheduled_publish_time"})
+        return self._request("GET", f"{self.page_id}/scheduled_posts", {"fields": "id,message,scheduled_publish_time"})
 
     def get_page_info(self) -> dict[str, Any]:
         fields = "name,about,category,website,emails,phone,description,location"
-        return self._request("GET", f"{PAGE_ID}", {"fields": fields})
+        return self._request("GET", f"{self.page_id}", {"fields": fields})
